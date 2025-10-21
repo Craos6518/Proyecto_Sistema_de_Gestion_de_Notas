@@ -10,10 +10,4 @@ export const mainDB = new Pool({
   port: 5432,
 });
 
-export const logsDB = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "logs_login",
-  password: "tu_contraseña",
-  port: 5432,
-});
+
