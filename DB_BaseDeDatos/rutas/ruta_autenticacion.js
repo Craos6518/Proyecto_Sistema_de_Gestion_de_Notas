@@ -4,10 +4,10 @@ import authService from "../servicios/servicio_autenticacion.js";
 const router = express.Router();
 
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const { email, contrasena } = req.body;
 
   try {
-    const result = await authService.login(email, password);
+    const result = await authService.login(email, contrasena);
     res.json(result);
   } catch (error) {
     console.error("Error en login:", error);
