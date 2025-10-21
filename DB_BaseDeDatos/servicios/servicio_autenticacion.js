@@ -23,9 +23,10 @@ class ServicioAutenticacion {
 
   async registrarIntento(email, idUsuario, tipo, razon, ip, userAgent) {
     const sql = "CALL sp_registrar_intento_login($1, $2, $3, $4, $5, $6)";
-    await logsDB.query(sql, [email, idUsuario, tipo, razon, ip, userAgent]);
+    await mainDB.query(sql, [email, idUsuario, tipo, razon, ip, userAgent]);
   }
 }
 
 export default new ServicioAutenticacion();
+
 
