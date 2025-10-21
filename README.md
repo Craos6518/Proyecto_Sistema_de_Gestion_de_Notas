@@ -95,12 +95,12 @@ npm run dev
 -- TABLA USUARIO
 -- ================================
 CREATE TABLE USUARIO (
-    id_usuario SERIAL PRIMARY KEY,  -- Usamos SERIAL para auto incremento
+    id_usuario SERIAL PRIMARY KEY,  -- Se usa SERIAL para auto incremento
     documento VARCHAR(50) NOT NULL,
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    contrasena VARCHAR(255) NOT NULL,
     rol VARCHAR(50) NOT NULL,  -- 'docente', 'estudiante', 'directivo'
     activo BOOLEAN DEFAULT TRUE
 );
@@ -151,7 +151,7 @@ CREATE TABLE MATRICULA (
     id_estudiante INT NOT NULL,
     id_asignatura INT NOT NULL,
     id_periodo INT NOT NULL,
-    fecha_matricula DATE DEFAULT CURRENT_DATE,  -- Usamos CURRENT_DATE para PostgreSQL
+    fecha_matricula DATE DEFAULT CURRENT_DATE,  
     estado VARCHAR(20) DEFAULT 'Activa',
     FOREIGN KEY (id_estudiante) REFERENCES USUARIO(id_usuario),
     FOREIGN KEY (id_asignatura) REFERENCES ASIGNATURA(id_asignatura),
@@ -179,7 +179,7 @@ CREATE TABLE NOTA (
     id_config INT NOT NULL,
     id_docente INT NOT NULL,
     valor_nota DECIMAL(5,2) CHECK (valor_nota >= 0 AND valor_nota <= 5),  
-    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Usamos CURRENT_TIMESTAMP para fecha y hora
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Se usa CURRENT_TIMESTAMP para fecha y hora
     fecha_modificacion TIMESTAMP,
     observaciones TEXT,
     FOREIGN KEY (id_matricula) REFERENCES MATRICULA(id_matricula),
@@ -199,6 +199,7 @@ CREATE TABLE REPORTE (
     resultado TEXT,
     FOREIGN KEY (id_directivo) REFERENCES USUARIO(id_usuario)
 );
+
 
 ```
 
