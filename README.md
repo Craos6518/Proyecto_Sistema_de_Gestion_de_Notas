@@ -95,7 +95,7 @@ npm run dev
 -- TABLA USUARIO
 -- ================================
 CREATE TABLE USUARIO (
-    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+    id_usuario SERIAL PRIMARY KEY,  -- Usamos SERIAL para auto incremento
     documento VARCHAR(50) NOT NULL,
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
@@ -109,7 +109,7 @@ CREATE TABLE USUARIO (
 -- TABLA ASIGNATURA
 -- ================================
 CREATE TABLE ASIGNATURA (
-    id_asignatura INT PRIMARY KEY AUTO_INCREMENT,
+    id_asignatura SERIAL PRIMARY KEY,  
     codigo VARCHAR(20) UNIQUE NOT NULL,
     nombre VARCHAR(100) NOT NULL,
     creditos INT NOT NULL,
@@ -121,7 +121,7 @@ CREATE TABLE ASIGNATURA (
 -- TABLA PERIODO_ACADEMICO
 -- ================================
 CREATE TABLE PERIODO_ACADEMICO (
-    id_periodo INT PRIMARY KEY AUTO_INCREMENT,
+    id_periodo SERIAL PRIMARY KEY,  
     nombre VARCHAR(50) NOT NULL,
     fecha_inicio DATE NOT NULL,
     fecha_fin DATE NOT NULL,
@@ -132,7 +132,7 @@ CREATE TABLE PERIODO_ACADEMICO (
 -- TABLA ASIGNACION (docente ↔ asignatura ↔ periodo)
 -- ================================
 CREATE TABLE ASIGNACION (
-    id_asignacion INT PRIMARY KEY AUTO_INCREMENT,
+    id_asignacion SERIAL PRIMARY KEY,  
     id_docente INT NOT NULL,
     id_asignatura INT NOT NULL,
     id_periodo INT NOT NULL,
@@ -147,11 +147,11 @@ CREATE TABLE ASIGNACION (
 -- TABLA MATRICULA (estudiante ↔ asignatura ↔ periodo)
 -- ================================
 CREATE TABLE MATRICULA (
-    id_matricula INT PRIMARY KEY AUTO_INCREMENT,
+    id_matricula SERIAL PRIMARY KEY,  
     id_estudiante INT NOT NULL,
     id_asignatura INT NOT NULL,
     id_periodo INT NOT NULL,
-    fecha_matricula DATE DEFAULT CURRENT_DATE,
+    fecha_matricula DATE DEFAULT CURRENT_DATE,  -- Usamos CURRENT_DATE para PostgreSQL
     estado VARCHAR(20) DEFAULT 'Activa',
     FOREIGN KEY (id_estudiante) REFERENCES USUARIO(id_usuario),
     FOREIGN KEY (id_asignatura) REFERENCES ASIGNATURA(id_asignatura),
@@ -162,7 +162,7 @@ CREATE TABLE MATRICULA (
 -- TABLA CONFIGURACION_NOTA (estructura de notas por asignatura)
 -- ================================
 CREATE TABLE CONFIGURACION_NOTA (
-    id_config INT PRIMARY KEY AUTO_INCREMENT,
+    id_config SERIAL PRIMARY KEY,  
     id_asignatura INT NOT NULL,
     tipo_nota VARCHAR(50) NOT NULL,  -- Ej: Parcial, Taller, Proyecto
     porcentaje DECIMAL(5,2) NOT NULL, -- Ej: 30.00
@@ -174,13 +174,13 @@ CREATE TABLE CONFIGURACION_NOTA (
 -- TABLA NOTA (notas registradas para un estudiante en una config)
 -- ================================
 CREATE TABLE NOTA (
-    id_nota INT PRIMARY KEY AUTO_INCREMENT,
+    id_nota SERIAL PRIMARY KEY,  
     id_matricula INT NOT NULL,
     id_config INT NOT NULL,
     id_docente INT NOT NULL,
-    valor_nota DECIMAL(5,2) CHECK (valor_nota BETWEEN 0 AND 5),
-    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
-    fecha_modificacion DATETIME,
+    valor_nota DECIMAL(5,2) CHECK (valor_nota >= 0 AND valor_nota <= 5),  
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Usamos CURRENT_TIMESTAMP para fecha y hora
+    fecha_modificacion TIMESTAMP,
     observaciones TEXT,
     FOREIGN KEY (id_matricula) REFERENCES MATRICULA(id_matricula),
     FOREIGN KEY (id_config) REFERENCES CONFIGURACION_NOTA(id_config),
@@ -191,14 +191,15 @@ CREATE TABLE NOTA (
 -- TABLA REPORTE (generado por directivo)
 -- ================================
 CREATE TABLE REPORTE (
-    id_reporte INT PRIMARY KEY AUTO_INCREMENT,
+    id_reporte SERIAL PRIMARY KEY,  
     id_directivo INT NOT NULL,
     tipo_reporte VARCHAR(50) NOT NULL,
-    fecha_generacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_generacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
     parametros TEXT,
     resultado TEXT,
     FOREIGN KEY (id_directivo) REFERENCES USUARIO(id_usuario)
 );
+
 ```
 
 ---
