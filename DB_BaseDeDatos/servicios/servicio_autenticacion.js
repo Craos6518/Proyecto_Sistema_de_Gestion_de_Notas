@@ -3,7 +3,7 @@ import { mainDB } from "../db/conexion.js";
 
 class ServicioAutenticacion {
   async login(email, password, ipAddress, userAgent) {
-    const query = "SELECT id_usuario, email, contraseña FROM usuario WHERE email = $1";
+    const query = "SELECT id_usuario, email, contrasena FROM usuario WHERE email = $1";
     const { rows } = await mainDB.query(query, [email]);
     const usuario = rows[0];
 
@@ -28,5 +28,6 @@ class ServicioAutenticacion {
 }
 
 export default new ServicioAutenticacion();
+
 
 
