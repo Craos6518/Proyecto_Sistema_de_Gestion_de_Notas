@@ -1,5 +1,5 @@
 // servicios/servicio_autenticacion.js
-import { mainDB, logsDB } from "../db/conexion.js";
+import { mainDB } from "../db/conexion.js";
 
 class ServicioAutenticacion {
   async login(email, password, ipAddress, userAgent) {
@@ -28,3 +28,4 @@ class ServicioAutenticacion {
 }
 
 export default new ServicioAutenticacion();
+
