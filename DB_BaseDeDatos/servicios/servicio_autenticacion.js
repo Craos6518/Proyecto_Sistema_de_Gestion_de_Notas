@@ -2,32 +2,27 @@
 import { mainDB } from "../db/conexion.js";
 
 class ServicioAutenticacion {
-  async login(email, password, ipAddress, userAgent) {
+  // Método para iniciar sesión
+  async login(email, password) {
+    // Consulta al usuario por email
     const query = "SELECT id_usuario, email, contrasena FROM usuario WHERE email = $1";
     const { rows } = await mainDB.query(query, [email]);
     const usuario = rows[0];
 
+    // Verificar si existe el usuario
     if (!usuario) {
-      await this.registrarIntento(email, null, "fallido", "usuario_no_existe", ipAddress, userAgent);
       return { success: false, message: "Usuario no encontrado" };
     }
 
-    if (password !== usuario.contraseña) {
-      await this.registrarIntento(email, usuario.id_usuario, "fallido", "contraseña_incorrecta", ipAddress, userAgent);
+    // Verificar contraseña
+    if (password !== usuario.contrasena) {
       return { success: false, message: "Contraseña incorrecta" };
     }
 
-    await this.registrarIntento(email, usuario.id_usuario, "exitoso", null, ipAddress, userAgent);
+    // Login exitoso
     return { success: true, message: "Inicio de sesión exitoso" };
-  }
-
-  async registrarIntento(email, idUsuario, tipo, razon, ip, userAgent) {
-    const sql = "CALL sp_registrar_intento_login($1, $2, $3, $4, $5, $6)";
-    await mainDB.query(sql, [email, idUsuario, tipo, razon, ip, userAgent]);
   }
 }
 
+// Exportar una instancia de la clase
 export default new ServicioAutenticacion();
-
-
-
