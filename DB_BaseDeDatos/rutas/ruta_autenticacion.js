@@ -5,11 +5,9 @@ const router = express.Router();
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  const ipAddress = req.ip;
-  const userAgent = req.headers["user-agent"];
 
   try {
-    const result = await authService.login(email, password, ipAddress, userAgent);
+    const result = await authService.login(email, password);
     res.json(result);
   } catch (error) {
     console.error("Error en login:", error);
